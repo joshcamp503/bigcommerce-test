@@ -30,7 +30,20 @@ category:
     {{{region name="category_below_header"}}}
 {{/unless}}
 {{{category.description}}}
-<button>CLICK ME</button>
+
+<button style="border: solid 1px #8f8f8f; border-radius: 3px; color: #333333; font-size: 13px; padding: 4px 16px">
+    Add All To Cart
+</button>
+
+<script>
+    const options = {method: 'GET', headers: {'Content-Type': 'application/json'}};
+
+    fetch('https://josh-campanella.mybigcommerce.com/api/storefront/carts', options)
+    .then(response => response.json())
+    .then(response => console.log(response))
+    .catch(err => console.error(err));
+</script>
+
 <div class="page">
     {{#if category.faceted_search_enabled}}
         <aside class="page-sidebar" id="faceted-search-container">
