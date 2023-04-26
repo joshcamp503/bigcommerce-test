@@ -59,3 +59,20 @@ pick the best-sized image based on its own understanding of how it will render t
 class="{{#unless lazyload '==' 'disabled'}}lazyload{{/unless}}{{#if class}} {{class}}{{/if}}"
 {{#if lazyload '==' 'lazyload'}}loading="lazy"{{/if}}
 {{otherAttributes}} />
+
+
+<script>
+    console.log("hello");
+    const cardImg = document.querySelector('.card-image');
+    cardImg.addEventListener("mouseover", () => {
+        const image2URL = 'https://cdn11.bigcommerce.com/s-lqmen05x9s/products/112/images/377/image-gallery-3__77250.1682395003.1280.1280.jpg?c=1'
+        cardImg.srcset = image2URL;
+        cardImg.src = image2URL;
+    });
+    cardImg.addEventListener("mouseout", () => {
+        const image1URL = 'https://cdn11.bigcommerce.com/s-lqmen05x9s/images/stencil/320w/products/112/376/image-product__62881.1682395003.jpg?c=1'
+        cardImg.srcset = image1URL;
+        cardImg.src = image1URL;
+    });
+
+</script>
