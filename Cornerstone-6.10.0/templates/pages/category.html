@@ -36,12 +36,71 @@ category:
 </button>
 
 <script>
-    const options = {method: 'GET', headers: {'Content-Type': 'application/json'}};
+    // const getCart = () => {
+    //     const options = {method: 'GET', headers: {'Content-Type': 'application/json'}};
+    //     fetch('https://josh-campanella.mybigcommerce.com/api/storefront/carts', options)
+    //         .then(response => response.json())
+    //         .then(response => console.log(response))
+    //         .catch(err => console.error(err));
+    // };
 
-    fetch('https://josh-campanella.mybigcommerce.com/api/storefront/carts', options)
-    .then(response => response.json())
-    .then(response => console.log(response))
-    .catch(err => console.error(err));
+    // const addToCart = () => {
+    //     const options = { method: 'POST', headers: {'Content-Type': 'application/json'}, body: productCartInfo };
+    //     fetch('https://josh-campanella.mybigcommerce.com/api/storefront/carts', options)
+    //         .then(response => response.json())
+    //         .then(response => console.log(response))
+    //         .catch(err => console.error(err));
+    // }
+
+    // const queryStore = () => {
+    //     fetch('/graphql', {
+    //     method: 'POST',
+    //     credentials: 'same-origin',
+    //     headers: { 
+    //         'Content-Type': 'application/json',
+    //         'Authorization': 'Bearer {{ settings.storefront_api.token }}'
+    //         // use auto-generated token
+    //     },
+    //     body: JSON.stringify({
+    //         query: `query MyFirstQuery {
+    //         site {
+    //             products {
+    //                 edges {
+    //                     node {
+    //                         name
+    //                         id
+    //                         entityId
+    //                         images {
+    //                             edges {
+    //                                 node {
+    //                                     url(width: 1200)
+    //                                 }
+    //                             }
+    //                         }
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //         }`
+    //     })
+    //     })
+    //     .then(res => res.json())
+    //     .then(data => console.log(data)) 
+    //     .catch(error => console.error(error));
+    // }
+    // queryStore()
+
+    // const addHover = () => {
+    //     const cardImg = document.querySelector('.card-image'); 
+    //     console.log(cardImg)
+    //     const idElements = document.querySelectorAll('.card');
+    //     idElements.forEach(elem => {
+    //         console.log(elem)
+    //     })
+    // };
+
+    // addHover();
+
 </script>
 
 <div class="page">
