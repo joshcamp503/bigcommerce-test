@@ -60,62 +60,61 @@ class="{{#unless lazyload '==' 'disabled'}}lazyload{{/unless}}{{#if class}} {{cl
 {{#if lazyload '==' 'lazyload'}}loading="lazy"{{/if}}
 {{otherAttributes}} />
 
-
 <script>
-    // const addHover = () => {
-    //     const cardImg = document.querySelector('.card-image'); 
-    //     const idElement = document.querySelector('.card')
-    //     const productId = idElement
-    //     console.log(idElement.dataset.test.slice(5))
-    //     if(idElement.dataset.test.slice(5) != 112) return false;
-    //     const productID = cardImg;
-    //     const originalImgUrl = cardImg.src
-        
-    //     fetch('/graphql', {
-    //         method: 'POST',
-    //         credentials: 'same-origin',
-    //         headers: { 
-    //             'Content-Type': 'application/json',
-    //             'Authorization': 'Bearer {{ settings.storefront_api.token }}'
-    //             // use auto-generated token
-    //         },
-    //         body: JSON.stringify({
-    //             query: 
-    //             `query SrcsetImages {
-    //                 site {
-    //                     product(entityId: 112) {
-    //                         images {
-    //                             edges {
-    //                                 node {
-    //                                     url1280wide: url(width: 1280)
-    //                                 }
-    //                             }
-    //                         }
-    //                     }
-    //                 }
-    //             }`
-    //         })
-    //     })
-    //     .then(res => res.json())
-    //     .then(data => {
-    //         console.log(data)
-    //         const hoverImg = data.data.site.product.images.edges[1].node.url1280wide
-    //         return hoverImg
-    //     })
-    //     .then(hoverImg => {
-    //         cardImg.addEventListener("mouseover", (e) => {
-    //             console.log(e.target)
-    //             cardImg.srcset = hoverImg;
-    //             cardImg.src = hoverImg;
-    //         });
-    //         cardImg.addEventListener("mouseout", () => {
-    //             cardImg.srcset = originalImgUrl;
-    //             cardImg.src = originalImgUrl;
-    //         });
-    //     })
-    //     .catch(error => console.error(error));
-    // };
 
-    // addHover();
+    if (document.querySelector('#product-listing-container')) {
+        const addHover = () => {
+            const cardImg = document.querySelector('.card-image'); 
+            const idElement = document.querySelector('.card')
+            const productId = idElement
+            if(idElement.dataset.test.slice(5) != 112) return false;
+            const productID = cardImg;
+            const originalImgUrl = cardImg.src
+            
+            fetch('/graphql', {
+                method: 'POST',
+                credentials: 'same-origin',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer {{ settings.storefront_api.token }}'
+                    // use auto-generated token
+                },
+                body: JSON.stringify({
+                    query: 
+                    `query SrcsetImages {
+                        site {
+                            product(entityId: 112) {
+                                images {
+                                    edges {
+                                        node {
+                                            url1280wide: url(width: 1280)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }`
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                const hoverImg = data.data.site.product.images.edges[1].node.url1280wide
+                return hoverImg
+            })
+            .then(hoverImg => {
+                cardImg.addEventListener("mouseover", (e) => {
+                    cardImg.srcset = hoverImg;
+                    cardImg.src = hoverImg;
+                });
+                cardImg.addEventListener("mouseout", () => {
+                    cardImg.srcset = originalImgUrl;
+                    cardImg.src = originalImgUrl;
+                });
+            })
+            .catch(error => console.error(error));
+        };
+
+        addHover();
+    }
 
 </script>

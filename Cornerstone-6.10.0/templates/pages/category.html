@@ -226,12 +226,13 @@ category:
         })
         .then(res => res.json())
         .then(data => {
+            console.log('User data:')
             console.log(data)
             const customer = data.data.customer
             if (customer) {
                 displayUserBanner(customer)
             }
-        }) // will log JSON result to browser console
+        })
         .catch(error => console.error(error));
     }
 
