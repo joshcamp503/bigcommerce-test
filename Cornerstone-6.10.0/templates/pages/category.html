@@ -158,15 +158,35 @@ category:
         return 'This function checks that the user has been authenticated on the server'
     }
 
+    // ADD STYLES TO USER BANNER
+    const addStyles = (elem, style) => {
+        for (const property in style) {
+            elem.style[property] = style[property]
+        }
+    }
+
+    const styles = {
+        backgroundColor: 'red',
+        display: 'flex',
+            alignItems: 'center',
+        position: 'absolute',
+            left: '0',
+        height: '100%',
+        width: '60%'
+    }
+
 // CHECK THAT USER IS LOGGED IN AND ON THE CATEGORY PAGE... BY CHECKING FOR THE PRESENCE OF THE ADDTOCART BUTTON UNIQUE TO CATEGORY.HTML (NOT IDEAL)
     const displayUserBanner = () => {
         if (checkForCustomer() && addToCartButton) {
             const nav = document.querySelector('.navUser')
-            const button = document.createElement('button')
-            button.textContent = "There's a USER!"
-            nav.prepend(button)
+            nav.style.position = 'relative'
+            const banner = document.createElement('nav')
+            banner.textContent = "There's a USER!"
+            addStyles(banner, styles)
+            nav.prepend(banner)
         }
     }
     displayUserBanner()
+    
 
 </script>
