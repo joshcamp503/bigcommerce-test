@@ -31,77 +31,15 @@ category:
 {{/unless}}
 {{{category.description}}}
 
-<button style="border: solid 1px #8f8f8f; border-radius: 3px; color: #333333; font-size: 13px; padding: 4px 16px">
+<!-- ADD ALL TO CART BUTTON -->
+<button class="addAllToCart" style="border: solid 1px #8f8f8f; border-radius: 3px; color: #333333; font-size: 13px; padding: 4px 16px">
     Add All To Cart
 </button>
 
-<script>
-    // const getCart = () => {
-    //     const options = {method: 'GET', headers: {'Content-Type': 'application/json'}};
-    //     fetch('https://josh-campanella.mybigcommerce.com/api/storefront/carts', options)
-    //         .then(response => response.json())
-    //         .then(response => console.log(response))
-    //         .catch(err => console.error(err));
-    // };
+<button class="deleteCart" style="border: solid 1px #8f8f8f; border-radius: 3px; color: #333333; font-size: 13px; padding: 4px 16px">
+    Delete Entire Cart
+</button>
 
-    // const addToCart = () => {
-    //     const options = { method: 'POST', headers: {'Content-Type': 'application/json'}, body: productCartInfo };
-    //     fetch('https://josh-campanella.mybigcommerce.com/api/storefront/carts', options)
-    //         .then(response => response.json())
-    //         .then(response => console.log(response))
-    //         .catch(err => console.error(err));
-    // }
-
-    // const queryStore = () => {
-    //     fetch('/graphql', {
-    //     method: 'POST',
-    //     credentials: 'same-origin',
-    //     headers: { 
-    //         'Content-Type': 'application/json',
-    //         'Authorization': 'Bearer {{ settings.storefront_api.token }}'
-    //         // use auto-generated token
-    //     },
-    //     body: JSON.stringify({
-    //         query: `query MyFirstQuery {
-    //         site {
-    //             products {
-    //                 edges {
-    //                     node {
-    //                         name
-    //                         id
-    //                         entityId
-    //                         images {
-    //                             edges {
-    //                                 node {
-    //                                     url(width: 1200)
-    //                                 }
-    //                             }
-    //                         }
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //         }`
-    //     })
-    //     })
-    //     .then(res => res.json())
-    //     .then(data => console.log(data)) 
-    //     .catch(error => console.error(error));
-    // }
-    // queryStore()
-
-    // const addHover = () => {
-    //     const cardImg = document.querySelector('.card-image'); 
-    //     console.log(cardImg)
-    //     const idElements = document.querySelectorAll('.card');
-    //     idElements.forEach(elem => {
-    //         console.log(elem)
-    //     })
-    // };
-
-    // addHover();
-
-</script>
 
 <div class="page">
     {{#if category.faceted_search_enabled}}
@@ -128,3 +66,152 @@ category:
 
 {{/partial}}
 {{> layout/base}}
+
+
+<script>
+
+    const createCart = () => {
+        const options = {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: '{"lineItems":[{"quantity":2,"productId":112}]}'
+        };
+
+        fetch('/api/storefront/carts', options)
+        .then(response => response.json())
+        .then(response => console.log(response))
+        .catch(err => console.error(err));
+    }
+
+// GET CART
+
+    const getCart = () => {
+        const options = {method: 'GET', headers: {'Content-Type': 'application/json'}};
+
+        fetch('/api/storefront/carts', options)
+            .then(response => response.json())
+            .then(response => console.log(response))
+            .catch(err => console.error(err));
+    }
+
+    const cartButton = document.querySelector('.addAllToCart');
+    cartButton.addEventListener('click', createCart)
+
+
+// DELETE ENTIRE CART
+
+    const deleteCart = () => {
+        
+        const getOptions = {method: 'GET', headers: {'Content-Type': 'application/json'}};
+        fetch('/api/storefront/carts', getOptions)
+        .then(response => response.json())
+        .then(data => {
+            console.log(data[0].id)
+            const cartId = data[0].id;
+            const deleteOptions = {method: 'DELETE', headers: {'Content-Type': 'application/json'}};
+            fetch(`/api/storefront/carts/${cartId}`, deleteOptions)
+                .then(response => response.json())
+                .then(response => console.log(response))
+                })
+        .catch(err => console.error(err));
+    }
+
+    const deleteButton = document.querySelector('.deleteCart');
+    deleteButton.addEventListener('click', deleteCart)
+
+// CREATE CART
+
+    // function createCart(url, cartItems) {
+    //     return fetch(url, {
+    //         method: "POST",
+    //         credentials: "same-origin",
+    //         headers: {
+    //         "Content-Type": "application/json"
+    //         },
+    //         body: JSON.stringify(cartItems),
+    //     })
+    //     .then(response => response.json())
+    //     .catch(error => console.error(error));
+    // };
+
+    // createCart(`/api/storefront/carts`, {
+    //     "lineItems": [
+    //         {
+    //         "quantity": 1,
+    //         "productId": 86
+    //         },
+    //         {
+    //         "quantity": 1,
+    //         "productId": 88
+    //         }
+    //     ]
+    // })
+    // .then(data => console.log(JSON.stringify(data)))
+    // .catch(error => console.error(error));
+
+// GET CART
+
+    // function getCart(url) {
+    //     return fetch(url, {
+    //         method: "GET",
+    //         credentials: "same-origin"
+    //     })
+    //     .then(response => response.json())
+    //     .catch(error => console.error(error));
+    // };
+
+    // getCart('/api/storefront/carts?include=lineItems.digitalItems.options,lineItems.physicalItems.options')
+    //     .then(data => console.log(JSON.stringify(data)))
+    //     .catch(error => console.error(error));
+
+
+// ADD CART ITEM
+
+    // function addCartItem(url, cartId, cartItems) {
+    //     return fetch(url + cartId + '/items', {
+    //         method: "POST",
+    //         credentials: "same-origin",
+    //         headers: {
+    //         "Content-Type": "application/json"
+    //         },
+    //         body: JSON.stringify(cartItems),
+    //     })
+    //     .then(response => response.json())
+    //     .catch(error => console.error(error));
+    // };
+
+    // addCartItem(`/api/storefront/carts/`, cartId, {
+    //     "lineItems": [
+    //         {
+    //         "quantity": 1,
+    //         "productId": 77
+    //         }
+    //     ]
+    // })
+    //     .then(data => console.log(JSON.stringify(data)))
+    //     .catch(error => console.error(error));
+
+
+// DELETE CART ITEM
+
+    // const itemId = '46e49bfd-cc17-4e9d-84dd-c09d970e9908'
+
+    // function deleteCartItem(url, cartId, itemId) {
+    //     return fetch(url + cartId + '/items/' + itemId, {
+    //         method: "DELETE",
+    //         credentials: "same-origin",
+    //         headers: {
+    //         "Content-Type": "application/json",
+    //         }
+    //     })
+    //     .then(response => response.json())
+    //     .catch(error => console.error(error));
+    // };
+
+    // deleteCartItem(`/api/storefront/carts/`, cartId, itemId)
+    //     .then(data => console.log(JSON.stringify(data)))
+    //     .catch(error => console.log(error));
+
+
+
+</script>
