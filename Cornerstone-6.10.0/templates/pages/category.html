@@ -65,8 +65,7 @@ category:
 
 
 <script>
-
-// BIND CONSTANT TO BUTTOM ELEMENT
+// BIND BUTTOM ELEMENT TO CONSTANT
     const addToCartButton = document.querySelector('.addAllToCart');
 
 // APPEND BUTTON TO DOM ON COMMAND
@@ -78,12 +77,9 @@ category:
         addToCartButton.insertAdjacentElement('afterend', button)
         button.addEventListener('click', deleteCart)
     }
-// REMOVE BUTTON FROM DOM ON COMMAND
-    const removeDeleteButton = () => {
-        const deleteButton = document.querySelector('.deleteCartButton');
-        deleteButton.remove()
-    }
 
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // GET CART FORM STOREFRONT API ON PAGE LOAD
     const getCart = () => {
         const options = {method: 'GET', headers: {'Content-Type': 'application/json'}};
@@ -98,8 +94,9 @@ category:
             .catch(err => console.error(err));
     }
     getCart()
-    
 
+    
+/////////////////////////////////////////////////////////////////////////////////////////
 // GET ID OF FIRST PRODUCT ON CATEGORY PAGE BY TARGETING DATA-TEST ATTRIBUTE
     const productCardList = Array.from(document.querySelectorAll('.card'))
     const productIdList = productCardList.map(prod => {
@@ -108,6 +105,7 @@ category:
     const firstItemId = productIdList[0]
 
 
+///////////////////////////////////////////////////////////////////////////////////////
 // USE FIRST PRODUCT ID TO CREATE CART
     const createCart = () => {
         const options = {
@@ -131,7 +129,15 @@ category:
     addToCartButton.addEventListener('click', createCart)
 
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // DELETE ENTIRE CART
+
+    // CREATE FUNCTION TO REMOVE DELETE BUTTON FROM DOM ON COMMAND
+    const removeDeleteButton = () => {
+            const deleteButton = document.querySelector('.deleteCartButton');
+            deleteButton.remove()
+        }
+    // CREATE FUNCTION TO DELETE CART
     const deleteCart = () => {
         // GET CART DATA FROM API TO MAKE THE CART ID AVAILABLE FOR DELETE REQUEST
         const getOptions = {method: 'GET', headers: {'Content-Type': 'application/json'}};
@@ -152,41 +158,83 @@ category:
         .catch(err => console.error(err));
     }
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // DISPLAY BANNER FOR LOGGED-IN CUSTOMER
 
-    const checkForCustomer = () => {
-        return 'This function checks that the user has been authenticated on the server'
-    }
-
-    // ADD STYLES TO USER BANNER
+    // FUNCTION THAT CREATES BANNER If USER IS LOGGED IN AND ON THE CATEGORY PAGE
+    const displayUserBanner = (customer) => {
+        if (customer && addToCartButton) {
+            // TARGET NAV AND MAKE POSITION RELATIVE FOR BANNER
+            const nav = document.querySelector('.navUser')
+            nav.style.position = 'relative'
+            // CREATE BANNER PARENT ELEMENT
+            const banner = document.createElement('nav')
+            // DEFINE USER BANNER CHILD ELEMENTS
+            const userDataHtml = `
+                <ul class="userData" style="color: #eeeeee; display: flex; gap: 6em; margin-left: 6em; width: 100%">
+                    <li>${customer.firstName} ${customer.lastName}</li>
+                    <li>${customer.email}</li>
+                    <li>${customer.phone}</li>
+                </ul>
+            `;
+            // ADD CHILD ELEMENTS, STYLES, AND ADD TO DOM
+            banner.innerHTML = userDataHtml;
+            addStyles(banner, styles)
+            nav.prepend(banner)
+        }
+    }    
+    
+    // FUNCTION TO ADD STYLES TO USER BANNER
     const addStyles = (elem, style) => {
         for (const property in style) {
             elem.style[property] = style[property]
         }
     }
 
+    // DEFINE STYLES
     const styles = {
-        backgroundColor: 'red',
+        backgroundColor: '#333333',
         display: 'flex',
             alignItems: 'center',
+        fontWeight: 'bold',
         position: 'absolute',
             left: '0',
         height: '100%',
         width: '60%'
     }
 
-// CHECK THAT USER IS LOGGED IN AND ON THE CATEGORY PAGE... BY CHECKING FOR THE PRESENCE OF THE ADDTOCART BUTTON UNIQUE TO CATEGORY.HTML (NOT IDEAL)
-    const displayUserBanner = () => {
-        if (checkForCustomer() && addToCartButton) {
-            const nav = document.querySelector('.navUser')
-            nav.style.position = 'relative'
-            const banner = document.createElement('nav')
-            banner.textContent = "There's a USER!"
-            addStyles(banner, styles)
-            nav.prepend(banner)
-        }
+    // FUNCTION THAT QUERIES GRAPHQL FOR CUSTOMER
+    const checkForCustomer = () => {
+        fetch('/graphql', {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer {{ settings.storefront_api.token }}' // use auto-generated token
+        },
+        body: JSON.stringify({
+            query: `query MyFirstQuery {
+            customer {
+                firstName
+                lastName
+                email
+                phone
+            }
+            }`
+        })
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log(data)
+            const customer = data.data.customer
+            if (customer) {
+                displayUserBanner(customer)
+            }
+        }) // will log JSON result to browser console
+        .catch(error => console.error(error));
     }
-    displayUserBanner()
-    
+
+    checkForCustomer()
 
 </script>
