@@ -91,7 +91,6 @@ category:
         fetch('/api/storefront/carts', options)
             .then(response => response.json())
             .then(response => {
-                console.log(response)
                 if (response.length > 0) {
                     appendDeleteButton()
                 }
@@ -121,11 +120,10 @@ category:
         .then(response => response.json())
         .then(response => {
             // CREATE AND APPEND DELETE BUTTON TO DOM IF NOT ALREADY PRESENT
-            cart = response;
+            console.log(response.lineItems)
             const button = document.querySelector('.deleteCartButton')
             if (!button) appendDeleteButton()
             alert('The product has been added to the cart')
-            return cart;
         })
         .catch(err => console.error(err));
     }
@@ -140,13 +138,12 @@ category:
         fetch('/api/storefront/carts', getOptions)
         .then(response => response.json())
         .then(data => {
-            console.log(data[0].id)
             const cartId = data[0].id;
             // SEND DELETE REQUEST
             const deleteOptions = {method: 'DELETE', headers: {'Content-Type': 'application/json'}};
             fetch(`/api/storefront/carts/${cartId}`, deleteOptions)
                 .then(response => {
-                    console.log(response);
+                    console.log(response)
                     // REMOVE DELETE BUTTON FROM DOM ONCE CART IS EMPTY
                     removeDeleteButton()
                     alert('All items have been removed from your cart')
@@ -154,5 +151,22 @@ category:
                 })
         .catch(err => console.error(err));
     }
+
+// DISPLAY BANNER FOR LOGGED-IN CUSTOMER
+
+    const checkForCustomer = () => {
+        return 'This function checks that the user has been authenticated on the server'
+    }
+
+// CHECK THAT USER IS LOGGED IN AND ON THE CATEGORY PAGE... BY CHECKING FOR THE PRESENCE OF THE ADDTOCART BUTTON UNIQUE TO CATEGORY.HTML (NOT IDEAL)
+    const displayUserBanner = () => {
+        if (checkForCustomer() && addToCartButton) {
+            const nav = document.querySelector('.navUser')
+            const button = document.createElement('button')
+            button.textContent = "There's a USER!"
+            nav.prepend(button)
+        }
+    }
+    displayUserBanner()
 
 </script>
