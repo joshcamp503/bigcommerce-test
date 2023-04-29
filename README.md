@@ -8,6 +8,12 @@ Preview Code: v38hxrzldh
 
 TEST SUMMARY:
 
+4/29/2023
+
+Re-tooled bonus task to utilize handlebars in category.html
+
+4/28/2023
+
 Hover Feature
   1) Open a script tag in responsive-img.html.
   2) Check to make sure the user has navigated to the Category page 
@@ -25,6 +31,8 @@ Add All To Cart/Remove All Items
   6) Remove All Items button on click gets the cart ID from the API and uses it to delete the cart and then remove the Remove All Items button from the DOM
 
 Display Banner if user is logged in
+
+**SEE NOTE ABOVE FOR 4/29/2023: I retooled this to utilize handlbars
   1) When category.html loads, query the API for customer data
   2) If a customer exists send their data through to the displayUserBanner function
   3) Check for existence of addToCartButton to ensure user is on category page

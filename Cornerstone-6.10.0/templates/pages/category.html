@@ -25,6 +25,68 @@ category:
         class="category-header-image"
     }}
 {{/if}}
+
+<!-- CUSTOMER DATA BANNER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+{{#if customer}}
+    <nav>
+        <ul class="userData" style="color: #eeeeee; display: flex; gap: 6em; margin-left: 6em; width: 100%">
+            <li>{{customer.name}}</li>
+            <li>{{customer.email}}</li>
+            <li>{{customer.phone}}</li>
+        </ul>
+    </nav>
+
+    <script>
+        // DISPLAY BANNER FOR LOGGED-IN CUSTOMER
+        // FUNCTION TO ADD STYLES TO USER BANNER
+        const addStyles = (elem, style) => {
+            for (const property in style) {
+                elem.style[property] = style[property]
+            }
+        }
+
+        // DEFINE STYLES
+        const styles = {
+            backgroundColor: '#333333',
+            display: 'flex',
+                alignItems: 'center',
+            fontWeight: 'bold',
+            position: 'absolute',
+                left: '0',
+            height: '100%',
+            margin: '0',
+            paddingLeft: '4em',
+            width: '60%'
+        }    
+        // FUNCTION THAT CREATES BANNER If USER IS LOGGED IN AND ON THE CATEGORY PAGE
+        const displayUserBanner = () => {
+        // if (customer && addToCartButton) {
+            // TARGET NAV AND MAKE POSITION RELATIVE FOR BANNER
+            const nav = document.querySelector('.navUser')
+            nav.style.position = 'relative'
+            // CREATE BANNER PARENT ELEMENT
+            // const banner = document.createElement('nav')
+            const banner = document.querySelector('.userData')
+            // DEFINE USER BANNER CHILD ELEMENTS
+            // const userDataHtml = `
+            //     <ul class="userData" style="color: #eeeeee; display: flex; gap: 6em; margin-left: 6em; width: 100%">
+            //         <li>{{customer.name}}</li>
+            //         <li>{{customer.email}}</li>
+            //         <li>{{customer.phone}}</li>
+            //     </ul>
+            // `;
+            // ADD CHILD ELEMENTS, STYLES, AND ADD TO DOM
+            // banner.innerHTML = userDataHtml;
+            addStyles(banner, styles)
+            nav.prepend(banner)
+        // }
+        }    
+        displayUserBanner()
+    </script>
+
+{{/if}}
+<!-- CUSTOMER DATA BANNER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+
 {{#unless theme_settings.hide_category_page_heading }}
     <h1 class="page-heading">{{category.name}}</h1>
     {{{region name="category_below_header"}}}
@@ -160,82 +222,5 @@ category:
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// DISPLAY BANNER FOR LOGGED-IN CUSTOMER
-
-    // FUNCTION THAT CREATES BANNER If USER IS LOGGED IN AND ON THE CATEGORY PAGE
-    const displayUserBanner = (customer) => {
-        if (customer && addToCartButton) {
-            // TARGET NAV AND MAKE POSITION RELATIVE FOR BANNER
-            const nav = document.querySelector('.navUser')
-            nav.style.position = 'relative'
-            // CREATE BANNER PARENT ELEMENT
-            const banner = document.createElement('nav')
-            // DEFINE USER BANNER CHILD ELEMENTS
-            const userDataHtml = `
-                <ul class="userData" style="color: #eeeeee; display: flex; gap: 6em; margin-left: 6em; width: 100%">
-                    <li>${customer.firstName} ${customer.lastName}</li>
-                    <li>${customer.email}</li>
-                    <li>${customer.phone}</li>
-                </ul>
-            `;
-            // ADD CHILD ELEMENTS, STYLES, AND ADD TO DOM
-            banner.innerHTML = userDataHtml;
-            addStyles(banner, styles)
-            nav.prepend(banner)
-        }
-    }    
-    
-    // FUNCTION TO ADD STYLES TO USER BANNER
-    const addStyles = (elem, style) => {
-        for (const property in style) {
-            elem.style[property] = style[property]
-        }
-    }
-
-    // DEFINE STYLES
-    const styles = {
-        backgroundColor: '#333333',
-        display: 'flex',
-            alignItems: 'center',
-        fontWeight: 'bold',
-        position: 'absolute',
-            left: '0',
-        height: '100%',
-        width: '60%'
-    }
-
-    // FUNCTION THAT QUERIES GRAPHQL FOR CUSTOMER
-    const checkForCustomer = () => {
-        fetch('/graphql', {
-        method: 'POST',
-        credentials: 'same-origin',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer {{ settings.storefront_api.token }}' // use auto-generated token
-        },
-        body: JSON.stringify({
-            query: `query MyFirstQuery {
-            customer {
-                firstName
-                lastName
-                email
-                phone
-            }
-            }`
-        })
-        })
-        .then(res => res.json())
-        .then(data => {
-            console.log('User data:')
-            console.log(data)
-            const customer = data.data.customer
-            if (customer) {
-                displayUserBanner(customer)
-            }
-        })
-        .catch(error => console.error(error));
-    }
-
-    checkForCustomer()
 
 </script>
