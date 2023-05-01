@@ -20,12 +20,13 @@ Hover Feature
   4) Add mouseover/out event listeners that change the <img> src urls accordingly. 
 
 Add All To Cart/Remove All Items
+**UPDATE: 4/30/2023 - I retooled this feature to not jsut create a new cart, but to also add items to an existing cart if there is one
   1) Add the Add All To Cart button to category.html, open a script tag and bind that button to a const. 
   2) Query Storefront API for a cart.
   3) If a cart already exists, create and append the Remove All Items button to the DOM, if not then return the cart object.
   4) Get the product ID of the first item on the page
     **I actually create a list of the IDs of all the items on the page so that I could have the option to try and add all items to cart
-  5) Use click event on Add to Cart button to create a cart with the first product on the category page and then append a Remove All Items button to the DOM, then notify user. (I opted to use an alert for this to keep it quick and easy, but this obviously the place to spin up a nice modal.)
+  5) Use click event on Add to Cart button to create a new cart with the first product on the category page (or add the item to an existing cart), then append a Remove All Items button to the DOM, then notify user. (I opted to use an alert for this to keep it quick and easy, but this obviously the place to spin up a nice modal.)
   6) Remove All Items button on click gets the cart ID from the API and uses it to delete the cart and then remove the Remove All Items button from the DOM
 
 Display Banner if user is logged in

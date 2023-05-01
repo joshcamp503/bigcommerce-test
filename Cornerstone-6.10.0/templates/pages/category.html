@@ -139,10 +139,11 @@ category:
                 if (response.length > 0) {
                     appendDeleteButton()
                 }
+                console.log(response)
             })
             .catch(err => console.error(err));
     }
-    getCart()
+    const cart = getCart()
 
     
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -167,7 +168,6 @@ category:
         .then(response => response.json())
         .then(response => {
             // CREATE AND APPEND DELETE BUTTON TO DOM IF NOT ALREADY PRESENT
-            console.log(response.lineItems)
             const button = document.querySelector('.deleteCartButton')
             if (!button) appendDeleteButton()
             if (!alert('The product has been added to the cart')) {
@@ -176,9 +176,43 @@ category:
         })
         .catch(err => console.error(err));
     }
-    // BIND CLICK EVENT TO CART BUTTON
-    addToCartButton.addEventListener('click', createCart)
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ADD ITEM TO EXISTING CART
+    const addToCart = (cartId) => {
+        const options = {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: `{"lineItems":[{"quantity":1,"productId":${firstItemId}}]}`
+        };
+
+            fetch(`/api/storefront/carts/${cartId}/items`, options)
+            .then(response => response.json())
+            .then(response => { 
+                if (!alert('The product has been added to the cart')) {
+                    window.location.reload()
+                }
+            })
+            .catch(err => console.error(err));
+    }
+
+    // CHECK FOR EXISTING CART THEN ADD ITEM TO EXISTING CART OR CREATE NEW CART IF THERE ISN'T ONE
+    const handleAddToCart = () => {
+        const options = {method: 'GET', headers: {'Content-Type': 'application/json'}};
+
+        fetch('/api/storefront/carts', options)
+            .then(response => response.json())
+            .then(cartList => {
+                if (cartList.length) {
+                    addToCart(cartList[0].id)
+                } else {
+                    createCart()
+                }
+            })
+    }
+
+    // BIND CLICK EVENT TO CART BUTTON
+    addToCartButton.addEventListener('click', handleAddToCart)
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // DELETE ENTIRE CART
