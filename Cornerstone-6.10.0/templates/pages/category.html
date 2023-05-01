@@ -37,7 +37,6 @@ category:
     </nav>
 
     <script>
-        // DISPLAY BANNER FOR LOGGED-IN CUSTOMER
         // FUNCTION TO ADD STYLES TO USER BANNER
         const addStyles = (elem, style) => {
             for (const property in style) {
@@ -58,25 +57,13 @@ category:
             paddingLeft: '4em',
             width: '60%'
         }    
-        // FUNCTION THAT CREATES BANNER If USER IS LOGGED IN AND ON THE CATEGORY PAGE
+        
+        // FUNCTION THAT CREATES BANNER If USER IS LOGGED IN
         const displayUserBanner = () => {
-        // if (customer && addToCartButton) {
             // TARGET NAV AND MAKE POSITION RELATIVE FOR BANNER
             const nav = document.querySelector('.navUser')
             nav.style.position = 'relative'
-            // CREATE BANNER PARENT ELEMENT
-            // const banner = document.createElement('nav')
             const banner = document.querySelector('.userData')
-            // DEFINE USER BANNER CHILD ELEMENTS
-            // const userDataHtml = `
-            //     <ul class="userData" style="color: #eeeeee; display: flex; gap: 6em; margin-left: 6em; width: 100%">
-            //         <li>{{customer.name}}</li>
-            //         <li>{{customer.email}}</li>
-            //         <li>{{customer.phone}}</li>
-            //     </ul>
-            // `;
-            // ADD CHILD ELEMENTS, STYLES, AND ADD TO DOM
-            // banner.innerHTML = userDataHtml;
             addStyles(banner, styles)
             nav.prepend(banner)
         // }

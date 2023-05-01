@@ -35,7 +35,6 @@ There are a few important arguments to know about when using this component:
     pixels wide will be used otherwise. This argument has no effect if the lazyload mode is not "lazyload+lqip".
 
 --}}
-
 <img {{#if image}}{{!-- Get the default image for legacy browsers that do not support srcset
 --}}src="{{getImageSrcset image 1x=(default fallback_size '160w')}}" alt="{{image.alt}}" title="{{image.alt}}" {{!--
   Allow lazysizes to generate the 'sizes' attribute automatically --}}data-sizes="auto"
@@ -63,28 +62,23 @@ class="{{#unless lazyload '==' 'disabled'}}lazyload{{/unless}}{{#if class}} {{cl
 
 <script>
 
+
+    // BLOCK THIS SCRIPT FROM RUNNING ON PAGES THAT AREN'T THE CATEGORY PAGE
     if (document.querySelector('#product-listing-container')) {
+        
         const addHover = () => {
-            const cardImg = document.querySelector('.card-image'); 
-            const idElement = document.querySelector('.card')
-            const productId = idElement
-            if(idElement.dataset.test.slice(5) != 112) return false;
-            const productID = cardImg;
-            const originalImgUrl = cardImg.src
-            
-            fetch('/graphql', {
-                method: 'POST',
-                credentials: 'same-origin',
-                headers: { 
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer {{ settings.storefront_api.token }}'
-                    // use auto-generated token
-                },
-                body: JSON.stringify({
-                    query: 
-                    `query SrcsetImages {
+
+            // GET ARRAY OF IMG'S AND ARRAY OF THE IMGS' PARENT ELEMENTS
+            const cardList = document.querySelectorAll('.card'); 
+            const cardImgList = document.querySelectorAll('.card-image'); 
+            cardList.forEach((item, idx) => {
+                // ISOLATE THE PRODUCT ID AND IMG SRC FROM DATA IN THE HTML
+                const itemId = item.dataset.test.slice(5)
+                const originalImgSrc = cardImgList[idx].src
+                // DEFINE THE QUERY THAT RETURNS THE PRODUCT'S SECOND IMG SRC URL
+                const graphQlQuery = `query SrcsetImages {
                         site {
-                            product(entityId: 112) {
+                            product(entityId: ${itemId}) {
                                 images {
                                     edges {
                                         node {
@@ -95,24 +89,39 @@ class="{{#unless lazyload '==' 'disabled'}}lazyload{{/unless}}{{#if class}} {{cl
                             }
                         }
                     }`
+                
+                // QUERY THE DATABASE
+                fetch('/graphql', {
+                    method: 'POST',
+                    credentials: 'same-origin',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer {{ settings.storefront_api.token }}'
+                    },
+                    body: JSON.stringify({
+                        query: graphQlQuery
+                        
+                    })
                 })
-            })
-            .then(res => res.json())
-            .then(data => {
-                const hoverImg = data.data.site.product.images.edges[1].node.url1280wide
-                return hoverImg
-            })
-            .then(hoverImg => {
-                cardImg.addEventListener("mouseover", (e) => {
-                    cardImg.srcset = hoverImg;
-                    cardImg.src = hoverImg;
-                });
-                cardImg.addEventListener("mouseout", () => {
-                    cardImg.srcset = originalImgUrl;
-                    cardImg.src = originalImgUrl;
-                });
-            })
-            .catch(error => console.error(error));
+                .then(res => res.json())
+                .then(data => {
+                    // BIND PRODUCT'S SECOND IMG SRC URL TO A VARIABLE
+                    const hoverImg = data.data.site.product.images.edges[1].node.url1280wide
+                    return hoverImg
+                })
+                .then(hoverImg => {
+                    // ADD EVENT LISTENERS TO SWAP THE IMG'S SRC & SRCSET ATTRIBUTES
+                    cardImgList[idx].addEventListener("mouseover", (e) => {
+                        cardImgList[idx].srcset = hoverImg;
+                        cardImgList[idx].src = hoverImg;
+                    });
+                    cardImgList[idx].addEventListener("mouseout", () => {
+                        cardImgList[idx].srcset = originalImgSrc;
+                        cardImgList[idx].src = originalImgSrc;
+                    });
+                })
+                .catch(error => console.error(error));
+                })
         };
 
         addHover();
