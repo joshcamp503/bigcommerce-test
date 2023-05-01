@@ -3,7 +3,7 @@ A light BigCommerce theme builder test...
 
 STORE PREVIEW INFO
 
-Preview URL: https://josh-campanella.mybigcommerce.com/?ctk=85cea0d1-f2bf-45e0-80d6-d4a4cca509fb
+Preview URL: https://josh-campanella.mybigcommerce.com/
 Preview Code: v38hxrzldh
 
 TEST SUMMARY:
