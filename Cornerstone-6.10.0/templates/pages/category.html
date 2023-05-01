@@ -183,7 +183,9 @@ category:
             console.log(response.lineItems)
             const button = document.querySelector('.deleteCartButton')
             if (!button) appendDeleteButton()
-            alert('The product has been added to the cart')
+            if (!alert('The product has been added to the cart')) {
+                window.location.reload()
+            }
         })
         .catch(err => console.error(err));
     }
@@ -214,7 +216,9 @@ category:
                     console.log(response)
                     // REMOVE DELETE BUTTON FROM DOM ONCE CART IS EMPTY
                     removeDeleteButton()
-                    alert('All items have been removed from your cart')
+                    if (!alert('All items have been removed from your cart')) {
+                        window.location.reload()
+                    }
                 })
                 })
         .catch(err => console.error(err));
