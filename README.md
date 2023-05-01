@@ -8,18 +8,16 @@ Preview Code: v38hxrzldh
 
 TEST SUMMARY:
 
-4/29/2023
-
-Re-tooled bonus task to utilize handlebars in category.html
-
-4/28/2023
+After submitting the link to the github repo on 4/28/2023, I made a few upgrades over the weekend. The updates are annotated below
 
 Hover Feature
+**UPDATE: 4/30/2023 - I retooled this feature to work for all images on every category page
   1) Open a script tag in responsive-img.html.
   2) Check to make sure the user has navigated to the Category page 
+  **query the dom for a list of all product cards and images
+  **for each product do the following:
   3) Query the API for the product image urls.
-  4) Add mouseover/out event listeners that chang the <img> src urls accordingly. 
-  **Ideally I would have made this feature available for all products in all categories but I am admittedly unfamiliar with the Stencil framework and GraphQL.
+  4) Add mouseover/out event listeners that change the <img> src urls accordingly. 
 
 Add All To Cart/Remove All Items
   1) Add the Add All To Cart button to category.html, open a script tag and bind that button to a const. 
@@ -32,7 +30,9 @@ Add All To Cart/Remove All Items
 
 Display Banner if user is logged in
 
-**SEE NOTE ABOVE FOR 4/29/2023: I retooled this to utilize handlbars
+**UPDATE: 4/29/2023 - I retooled this feature to utilize handlbars {{#if customer}} <nav><ul>list of customer data</ul></nav> and run a function to style this html
+
+**PREVIOUS:
   1) When category.html loads, query the API for customer data
   2) If a customer exists send their data through to the displayUserBanner function
   3) Check for existence of addToCartButton to ensure user is on category page
@@ -40,4 +40,4 @@ Display Banner if user is logged in
 
 Final thoughts:
 
-Writing the javascript to execute these tasks was simple enough. I found the documentation was sufficient to work through most things. The API structure was a little hard to figure out at first, but once I figured it out it was pretty simple. A pesky strict-origin-when-cross-origin issue with the local proxy server tripped me up, but I debugged it in my local dev environment. And finally, on the bonus task, I couldn't get a feel for exactly how to grab the data that Handlebars was injecting. I can see how it works but in the time I had I couldn't wrap my head around it enough to use it for the bonus task. I'm intrigued though and excited for the opportunity to work with Handlebars and the Stencil framework more. I'm most familiar with React and I like that Stencil is based on building modular components in a similar way.
+Writing the javascript to execute these tasks was pretty simple. The challenge was getting familiar quickly with Stencil, Handlebars, GraphQL, and the API structure. Fortunately the BigCommerce documentation was clear and easy to navigate. I did have to debug a pesky strict-origin-when-cross-origin issue with the local proxy server, but I made a change to my local dev environment that cleared it right up. All that being said, I'm intrigued though excited for the opportunity to work with Handlebars and the Stencil framework more. I'm most familiar with React and I like that Stencil is based on building modular components in a similar way.
